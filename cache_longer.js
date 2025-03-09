@@ -12,9 +12,9 @@ browser.webRequest.onHeadersReceived.addListener(
     function (details) {
         if (debug) {
             console.log("----");
-            console.log("url:"+details.url);
-            console.log("type:"+details.type);
-            console.log("cache:"+details.fromCache)
+            console.log("url:" + details.url);
+            console.log("type:" + details.type);
+            console.log("cache:" + details.fromCache)
         }
         if (!details.fromCache) {
             var expires_found = false;
@@ -25,17 +25,17 @@ browser.webRequest.onHeadersReceived.addListener(
             for (var header of details.responseHeaders) {
                 if (header.name.toLowerCase() === 'expires') {
                     expires_found = true;
-                    if (debug ) console.log("oexpires:" + header.value);
+                    if (debug) console.log("oexpires:" + header.value);
                     header.value = new_expires;
-                    if (debug ) console.log("nexpires:" + header.value);
+                    if (debug) console.log("nexpires:" + header.value);
                 } else if (header.name.toLowerCase() === 'cache-control') {
                     cache_control_found = true;
-                    if (debug ) console.log("ncache-control:" + header.value);
+                    if (debug) console.log("ncache-control:" + header.value);
                     header.value = maxAge;
-                    if (debug ) console.log("ocache-control:" + header.value);
-                // } else if (header.name.toLowerCase() === 'last-modified') {
-                //     header.value = lms;
-                //     if (debug ) console.log("last-modified:" + header.value);
+                    if (debug) console.log("ocache-control:" + header.value);
+                    // } else if (header.name.toLowerCase() === 'last-modified') {
+                    //     header.value = lms;
+                    //     if (debug ) console.log("last-modified:" + header.value);
                 }
             }
             if (!expires_found) {
