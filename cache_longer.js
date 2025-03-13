@@ -30,9 +30,9 @@ browser.webRequest.onHeadersReceived.addListener(
                     if (debug) console.log("nexpires:" + header.value);
                 } else if (header.name.toLowerCase() === 'cache-control') {
                     cache_control_found = true;
-                    if (debug) console.log("ncache-control:" + header.value);
-                    header.value = maxAge;
                     if (debug) console.log("ocache-control:" + header.value);
+                    header.value = maxAge;
+                    if (debug) console.log("ncache-control:" + header.value);
                     // } else if (header.name.toLowerCase() === 'last-modified') {
                     //     header.value = lms;
                     //     if (debug ) console.log("last-modified:" + header.value);
@@ -40,9 +40,11 @@ browser.webRequest.onHeadersReceived.addListener(
             }
             if (!expires_found) {
                 // If we are here, we didn't find any existing matching header.
+                if (debug) console.log("adding expires");
                 details.responseHeaders.push({name: "Expires", value: new_expires});
             }
             if (!cache_control_found) {
+                if (debug) console.log("adding cache-control");
                 details.responseHeaders.push({name: "Cache-Control", value: maxAge});
             }
         }
