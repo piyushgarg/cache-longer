@@ -17,15 +17,36 @@
         {
           "header": "Pragma",
           "operation": "remove"
+        },
+        {
+          "header": "Surrogate-Control",
+          "operation": "remove"
+        },
+        {
+          "header": "CDN-Cache-Control",
+          "operation": "remove"
+        },
+        {
+          "header": "Clear-Site-Data",
+          "operation": "remove"
+        },
+        {
+          "header": "Age",
+          "operation": "remove"
         }
       ]
     },
     "condition": {
+      "regexFilter": "\\.(js|mjs|cjs|css|png|jpg|jpeg|gif|svg|webp|avif|ico|bmp|woff|woff2|ttf|otf|eot|mp4|webm|ogg|mp3|wav|flac|aac|wasm|map|pdf)(\\?.*)?$",
+      "isUrlFilterCaseSensitive": false,
       "resourceTypes": [
         "script",
         "stylesheet",
         "image",
-        "font"
+        "font",
+        "media",
+        "xmlhttprequest",
+        "other"
       ]
     }
   }
