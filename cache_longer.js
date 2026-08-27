@@ -2,13 +2,76 @@
 
 console.log("Loading Cache Longer");
 
-var debug = false;
-var currentDate = new Date();
-currentDate.setMonth(currentDate.getMonth() + 6);
-new_expires = currentDate.toUTCString();  //6 months in the future
-var maxAge = 'public, max-age=15780000'; //6 months in seconds
+const DEBUG = false;
+// var currentDate = new Date();
+// currentDate.setMonth(currentDate.getMonth() + 6);
+// new_expires = currentDate.toUTCString();  //6 months in the future
+// var maxAge = 'public, max-age=15780000'; //6 months in seconds
+const MAX_AGE_SECONDS = 15768000;
+const CACHE_CONTROL_VALUE = `public, max-age=${MAX_AGE_SECONDS}, immutable`;
 
+function getFutureExpiresHeader() {
+    const currentDate = new Date();
+    currentDate.setMonth(currentDate.getMonth() + 6);
+    return currentDate.toUTCString();
+}
+
+// STEP 1: Prevent browser from sending conditional revalidation requests
+// Strip conditional request headers to prevent HTTP 304 revalidation trips
+browser.webRequest.onBeforeSendHeaders.addListener(
+    function (details) {
+        let headers = details.requestHeaders.filter(header => {
+            const name = header.name.toLowerCase();
+            return name !== 'if-none-match' &&
+                name !== 'if-modified-since' &&
+                name !== 'cache-control';
+        });
+
+        return { requestHeaders: headers };
+    },
+    {
+        urls: ["<all_urls>"],
+        types: ["font", "image", "script", "stylesheet"]
+    },
+    ["blocking", "requestHeaders"]
+);
+
+// STEP 2: Rewrite response headers to force disk caching
 browser.webRequest.onHeadersReceived.addListener(
+    function (details) {
+        if (DEBUG) {
+            console.log("----");
+            console.log("URL:", details.url);
+            console.log("Type:", details.type);
+            console.log("From Cache:", details.fromCache);
+        }
+
+        // Filter out headers that prevent caching
+        let headers = details.responseHeaders.filter(header => {
+            const name = header.name.toLowerCase();
+            return name !== 'cache-control' &&
+                name !== 'expires' &&
+                name !== 'pragma' &&
+                name !== 'vary' && // Removing vary prevents cache invalidation across origin states
+                name !== 'access-control-allow-origin';
+        });
+
+        // Add our overriding caching directives
+        // Enforce max caching directives
+        headers.push({ name: 'Cache-Control', value: CACHE_CONTROL_VALUE });
+        headers.push({ name: 'Expires', value: getFutureExpiresHeader() });
+        headers.push({ name: 'Access-Control-Allow-Origin', value: '*' });
+
+        if (DEBUG) {
+            console.log("Applied Modified Headers for:", details.url);
+        }
+
+        return { responseHeaders: headers };
+    },
+    { urls: ["<all_urls>"], types: ["font", "image", "script", "stylesheet"] }, ["blocking", "responseHeaders"]
+);
+
+/*browser.webRequest.onHeadersReceived.addListener(
     function (details) {
         if (debug) {
             console.log("----");
@@ -52,4 +115,4 @@ browser.webRequest.onHeadersReceived.addListener(
     },
     {urls: ["<all_urls>"], types: ["font", "image", "script", "stylesheet"]},
     ["blocking", "responseHeaders"]
-);
+);*/

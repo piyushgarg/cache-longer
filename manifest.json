@@ -1,21 +1,26 @@
 {
   "manifest_version": 2,
-
   "name": "Cache Longer",
-  "version": "1.1",
+  "version": "1.2",
   "author": "Piyush Garg",
-
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "cache-longer@piyushgarg.in",
+      "strict_min_version": "57.0"
+    }
+  },
   "icons": {
     "96": "icon.png"
   },
-
   "description": "Cache Longer modifies HTTP headers to make your browser cache things for longer and make your life move faster.",
   "homepage_url": "https://web.piyushgarg.in",
-
   "background": {
-      "scripts": ["cache_longer.js"]
+    "scripts": ["cache_longer.js"]
   },
-
-  "permissions": [ "storage", "webRequest", "webRequestBlocking", "<all_urls>" ]
-
+  "permissions": [
+    "storage",
+    "webRequest",
+    "webRequestBlocking",
+    "<all_urls>"
+  ]
 }
