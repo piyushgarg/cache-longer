@@ -1,26 +1,35 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Cache Longer",
   "version": "1.2",
-  "author": "Piyush Garg",
+  "description": "Enforces long-term caching headers on static web assets.",
+  "permissions": [
+    "declarativeNetRequest"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
   "browser_specific_settings": {
     "gecko": {
-      "id": "cache-longer@piyushgarg.in",
-      "strict_min_version": "57.0"
+      "id": "{fa5e22bc-cf97-4478-8a8e-8dab96f9f466}",
+      "strict_min_version": "142.0",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
     }
   },
-  "icons": {
-    "96": "icon.png"
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "cache_rules",
+        "enabled": true,
+        "path": "rules.json"
+      }
+    ]
   },
-  "description": "Cache Longer modifies HTTP headers to make your browser cache things for longer and make your life move faster.",
-  "homepage_url": "https://web.piyushgarg.in",
   "background": {
-    "scripts": ["cache_longer.js"]
-  },
-  "permissions": [
-    "storage",
-    "webRequest",
-    "webRequestBlocking",
-    "<all_urls>"
-  ]
+    "service_worker": "background.js"
+  }
 }
