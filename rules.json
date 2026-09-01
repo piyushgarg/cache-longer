@@ -5,49 +5,34 @@
     "action": {
       "type": "modifyHeaders",
       "responseHeaders": [
-        {
-          "header": "Cache-Control",
-          "operation": "set",
-          "value": "public, max-age=31536000, immutable"
-        },
-        {
-          "header": "Expires",
-          "operation": "remove"
-        },
-        {
-          "header": "Pragma",
-          "operation": "remove"
-        },
-        {
-          "header": "Surrogate-Control",
-          "operation": "remove"
-        },
-        {
-          "header": "CDN-Cache-Control",
-          "operation": "remove"
-        },
-        {
-          "header": "Clear-Site-Data",
-          "operation": "remove"
-        },
-        {
-          "header": "Age",
-          "operation": "remove"
-        }
+        { "header": "cache-control", "operation": "set", "value": "public, max-age=31536000, immutable" },
+        { "header": "expires", "operation": "remove" },
+        { "header": "pragma", "operation": "remove" },
+        { "header": "vary", "operation": "remove" }
       ]
     },
     "condition": {
-      "regexFilter": "\\.(js|mjs|cjs|css|png|jpg|jpeg|gif|svg|webp|avif|ico|bmp|woff|woff2|ttf|otf|eot|mp4|webm|ogg|mp3|wav|flac|aac|wasm|map|pdf)(\\?.*)?$",
+      "regexFilter": "\\.(js|mjs|cjs|css|png|jpg|jpeg|gif|svg|webp|avif|ico|bmp)(\\?.*)?$",
       "isUrlFilterCaseSensitive": false,
-      "resourceTypes": [
-        "script",
-        "stylesheet",
-        "image",
-        "font",
-        "media",
-        "xmlhttprequest",
-        "other"
+      "resourceTypes": ["script", "stylesheet", "image", "xmlhttprequest", "other"]
+    }
+  },
+  {
+    "id": 2,
+    "priority": 1,
+    "action": {
+      "type": "modifyHeaders",
+      "responseHeaders": [
+        { "header": "cache-control", "operation": "set", "value": "public, max-age=31536000, immutable" },
+        { "header": "expires", "operation": "remove" },
+        { "header": "pragma", "operation": "remove" },
+        { "header": "vary", "operation": "remove" }
       ]
+    },
+    "condition": {
+      "regexFilter": "\\.(woff|woff2|ttf|otf|eot|mp4|webm|ogg|mp3|wav|flac|aac|wasm|map|pdf)(\\?.*)?$",
+      "isUrlFilterCaseSensitive": false,
+      "resourceTypes": ["font", "media", "xmlhttprequest", "other"]
     }
   }
 ]
